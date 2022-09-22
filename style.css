@@ -93,3 +93,13 @@ main {
 .darker:hover {
   background: #222;
 }
+
+footer {
+  display: flex;
+  justify-content: center;
+  font-family: monospace;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}

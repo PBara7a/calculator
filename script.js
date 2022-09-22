@@ -7,6 +7,9 @@ const equalsBtn = document.querySelector("#equals");
 const plusMinusBtn = document.querySelector("#plus-minus");
 const percentageBtn = document.querySelector("#percentage");
 const decimalBtn = document.querySelector("#decimal");
+const footer = document.querySelector("footer");
+
+footer.textContent += ` ${new Date().getFullYear()}`;
 
 // Calculator functions
 const add = (a, b) => a + b;
