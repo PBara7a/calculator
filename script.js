@@ -4,6 +4,8 @@ const numBtns = document.querySelectorAll(".num");
 const allClearBtn = document.querySelector("#ac");
 const operationBtns = document.querySelectorAll(".operation");
 const equalsBtn = document.querySelector("#equals");
+const plusMinusBtn = document.querySelector("#plus-minus");
+const percentageBtn = document.querySelector("#percentage");
 
 // Calculator functions
 const add = (a, b) => a + b;
@@ -88,6 +90,23 @@ const handleEquals = () => {
   needReset = true;
 };
 
+const handlePlusEquals = () => {
+  needReset = true;
+  const currentNumber = Number(currentOnDisplay);
+  const newNum =
+    currentNumber > 0 ? `-${currentNumber}` : currentOnDisplay.slice(1);
+
+  appendOnDisplay(newNum);
+};
+
+const handlePercentage = () => {
+  needReset = true;
+  const currentNumber = Number(currentOnDisplay);
+  const newNum = operate("/", currentNumber, 100);
+
+  appendOnDisplay(newNum);
+};
+
 // Setup events
 numBtns.forEach((btn) => {
   btn.onclick = () => appendOnDisplay(btn.textContent);
@@ -100,3 +119,7 @@ operationBtns.forEach((btn) => {
 allClearBtn.onclick = allClear;
 
 equalsBtn.onclick = handleEquals;
+
+plusMinusBtn.onclick = handlePlusEquals;
+
+percentageBtn.onclick = handlePercentage;
