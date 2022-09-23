@@ -1,3 +1,3 @@
-# calculator-vanilla
+# calculator
 
-[Live Demo](https://pbara7a.github.io/calculator-vanilla/)
+[Live Demo](https://pbara7a.github.io/calculator/)
