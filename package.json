@@ -1,0 +1,25 @@
+{
+  "name": "calculator",
+  "version": "1.0.0",
+  "description": "A simple calculator built with vanilla JavaScript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "parcel serve src/index.html",
+    "deploy": "gh-pages -d dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PBara7a/calculator.git"
+  },
+  "author": "Paulo Barata",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PBara7a/calculator/issues"
+  },
+  "homepage": "https://github.com/PBara7a/calculator",
+  "devDependencies": {
+    "gh-pages": "^4.0.0",
+    "typescript": "^4.8.3"
+  }
+}
