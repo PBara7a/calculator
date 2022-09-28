@@ -9,29 +9,55 @@ const percentageBtn = document.querySelector("#percentage");
 const decimalBtn = document.querySelector("#decimal");
 const footer = document.querySelector("footer");
 
+if (footer) footer.textContent += ` ${new Date().getFullYear()}`;
+
+// Setup event listeners
+if (allClearBtn) allClearBtn.addEventListener("click", handleallClear);
+if (equalsBtn) equalsBtn.addEventListener("click", handleEquals);
+if (plusMinusBtn) plusMinusBtn.addEventListener("click", handlePlusEquals);
+if (percentageBtn) percentageBtn.addEventListener("click", handlePercentage);
+if (decimalBtn) decimalBtn.addEventListener("click", handleDecimalPoint);
+
+numBtns.forEach((btn): void => {
+  if (!btn) return;
+
+  btn.addEventListener("click", () => appendOnDisplay(btn.textContent || ""));
+});
+
+operationBtns.forEach((btn): void => {
+  if (!btn) return;
+
+  btn.addEventListener("click", () => setOperation(btn.textContent || ""));
+});
+
+// State
 let currentOnDisplay: string;
 let firstOperand: number | null;
 let currentOperation: string;
 let needReset = false;
 
-if (footer instanceof HTMLElement) {
-  footer.textContent += ` ${new Date().getFullYear()}`;
-}
-
-if (mainScreen instanceof HTMLElement) {
+if (mainScreen) {
   currentOnDisplay = mainScreen.textContent || "";
 }
 
-// Calculator functions
-const add = (a: number, b: number): number => a + b;
+// Math operations
+function add(a: number, b: number): number {
+  return a + b;
+}
 
-const subtract = (a: number, b: number): number => a - b;
+function subtract(a: number, b: number): number {
+  return a - b;
+}
 
-const multiply = (a: number, b: number): number => a * b;
+function multiply(a: number, b: number): number {
+  return a * b;
+}
 
-const divide = (a: number, b: number): number => a / b;
+function divide(a: number, b: number): number {
+  return a / b;
+}
 
-const operate = (operator: string, a: number, b: number): number => {
+function operate(operator: string, a: number, b: number): number {
   let result: number;
 
   switch (operator) {
@@ -48,10 +74,11 @@ const operate = (operator: string, a: number, b: number): number => {
       result = divide(a, b);
   }
   return result;
-};
+}
 
-const appendOnDisplay = (value: string): void => {
-  if (!(mainScreen instanceof HTMLElement)) return;
+// Calculator functionality
+function appendOnDisplay(value: string): void {
+  if (!mainScreen) return;
 
   if (needReset) resetMainScreen();
 
@@ -64,9 +91,9 @@ const appendOnDisplay = (value: string): void => {
   currentOnDisplay = mainScreen.textContent || "";
 
   needReset = false;
-};
+}
 
-const setOperation = (operation: string): void => {
+function setOperation(operation: string): void {
   if (firstOperand) {
     firstOperand = operate(
       currentOperation,
@@ -80,32 +107,32 @@ const setOperation = (operation: string): void => {
   needReset = true;
 
   updateTopScreen();
-};
+}
 
-const updateTopScreen = (): void => {
-  if (!(topScreen instanceof HTMLElement)) return;
+function updateTopScreen(): void {
+  if (!topScreen) return;
 
   topScreen.textContent = `${firstOperand} ${currentOperation}`;
-};
+}
 
-const resetMainScreen = (): void => {
-  if (!(mainScreen instanceof HTMLElement)) return;
+function resetMainScreen(): void {
+  if (!mainScreen) return;
 
   mainScreen.textContent = "0";
   currentOnDisplay = "0";
-};
+}
 
-const allClear = (): void => {
-  if (!(topScreen instanceof HTMLElement)) return;
+function handleallClear(): void {
+  if (!topScreen) return;
 
   resetMainScreen();
 
   topScreen.textContent = "";
   firstOperand = null;
   currentOperation = "";
-};
+}
 
-const handleEquals = (): void => {
+function handleEquals(): void {
   if (!firstOperand) return;
 
   const result = operate(
@@ -114,64 +141,31 @@ const handleEquals = (): void => {
     Number(currentOnDisplay)
   );
 
-  allClear();
+  handleallClear();
 
   appendOnDisplay(String(result));
   needReset = true;
-};
+}
 
-const handlePlusEquals = (): void => {
+function handlePlusEquals(): void {
   needReset = true;
   const currentNumber = Number(currentOnDisplay);
   const newNumStr =
     currentNumber > 0 ? `-${currentNumber}` : currentOnDisplay.slice(1);
 
   appendOnDisplay(newNumStr);
-};
+}
 
-const handlePercentage = (): void => {
+function handlePercentage(): void {
   needReset = true;
   const currentNumber = Number(currentOnDisplay);
   const newNum = operate("/", currentNumber, 100);
 
   appendOnDisplay(String(newNum));
-};
+}
 
-const appendDecimalPoint = (): void => {
+function handleDecimalPoint(): void {
   if (currentOnDisplay.includes(".")) return;
 
   appendOnDisplay(".");
-};
-
-// Setup events
-numBtns.forEach((btn): void => {
-  if (!(btn instanceof HTMLElement)) return;
-
-  btn.onclick = () => appendOnDisplay(btn.textContent || "");
-});
-
-operationBtns.forEach((btn): void => {
-  if (!(btn instanceof HTMLElement)) return;
-
-  btn.onclick = () => setOperation(btn.textContent || "");
-});
-
-if (allClearBtn instanceof HTMLElement) {
-  allClearBtn.onclick = allClear;
-}
-
-if (equalsBtn instanceof HTMLElement) {
-  equalsBtn.onclick = handleEquals;
-}
-
-if (plusMinusBtn instanceof HTMLElement) {
-  plusMinusBtn.onclick = handlePlusEquals;
-}
-
-if (percentageBtn instanceof HTMLElement) {
-  percentageBtn.onclick = handlePercentage;
-}
-
-if (decimalBtn instanceof HTMLElement) {
-  decimalBtn.onclick = appendDecimalPoint;
 }
