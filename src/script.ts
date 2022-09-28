@@ -1,3 +1,6 @@
+import type { Operator } from "./types";
+import { operate } from "./mathFunctions.js";
+
 const mainScreen = document.querySelector("#screen-bottom");
 const topScreen = document.querySelector("#screen-top");
 const numBtns = document.querySelectorAll(".num");
@@ -27,59 +30,19 @@ numBtns.forEach((btn): void => {
 operationBtns.forEach((btn): void => {
   if (!btn) return;
 
-  btn.addEventListener("click", () => setOperation(btn.textContent || ""));
+  btn.addEventListener("click", () =>
+    setOperation((btn.textContent as Operator) || null)
+  );
 });
 
 // State
 let currentOnDisplay: string;
 let firstOperand: number | null;
-let currentOperation: string;
+let currentOperation: Operator | null;
 let needReset = false;
 
 if (mainScreen) {
   currentOnDisplay = mainScreen.textContent || "";
-}
-
-// Math operations
-type Operator = "+" | "-" | "x" | "/";
-
-function add(a: number, b: number): number {
-  return a + b;
-}
-
-function subtract(a: number, b: number): number {
-  return a - b;
-}
-
-function multiply(a: number, b: number): number {
-  return a * b;
-}
-
-function divide(a: number, b: number): number {
-  return a / b;
-}
-
-function operate(operator: Operator, a: number, b: number): number {
-  let result: number;
-
-  switch (operator) {
-    case "+":
-      result = add(a, b);
-      break;
-    case "-":
-      result = subtract(a, b);
-      break;
-    case "x":
-      result = multiply(a, b);
-      break;
-    case "/":
-      result = divide(a, b);
-      break;
-    default:
-      const _exhaustiveCheck: never = operator;
-      result = _exhaustiveCheck;
-  }
-  return result;
 }
 
 // Calculator functionality
@@ -99,8 +62,8 @@ function appendOnDisplay(value: string): void {
   needReset = false;
 }
 
-function setOperation(operation: string): void {
-  if (firstOperand) {
+function setOperation(operation: Operator): void {
+  if (firstOperand && currentOperation) {
     firstOperand = operate(
       currentOperation,
       firstOperand,
@@ -135,22 +98,24 @@ function handleallClear(): void {
 
   topScreen.textContent = "";
   firstOperand = null;
-  currentOperation = "";
+  currentOperation = null;
 }
 
 function handleEquals(): void {
   if (!firstOperand) return;
 
-  const result = operate(
-    currentOperation,
-    firstOperand,
-    Number(currentOnDisplay)
-  );
+  if (currentOperation) {
+    const result = operate(
+      currentOperation,
+      firstOperand,
+      Number(currentOnDisplay)
+    );
 
-  handleallClear();
+    handleallClear();
 
-  appendOnDisplay(String(result));
-  needReset = true;
+    appendOnDisplay(String(result));
+    needReset = true;
+  }
 }
 
 function handlePlusEquals(): void {
