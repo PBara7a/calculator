@@ -1,4 +1,4 @@
-"use strict";
+import { operate } from "./mathFunctions.js";
 const mainScreen = document.querySelector("#screen-bottom");
 const topScreen = document.querySelector("#screen-top");
 const numBtns = document.querySelectorAll(".num");
@@ -30,7 +30,7 @@ numBtns.forEach((btn) => {
 operationBtns.forEach((btn) => {
     if (!btn)
         return;
-    btn.addEventListener("click", () => setOperation(btn.textContent || ""));
+    btn.addEventListener("click", () => setOperation(btn.textContent || null));
 });
 // State
 let currentOnDisplay;
@@ -39,36 +39,6 @@ let currentOperation;
 let needReset = false;
 if (mainScreen) {
     currentOnDisplay = mainScreen.textContent || "";
-}
-// Math operations
-function add(a, b) {
-    return a + b;
-}
-function subtract(a, b) {
-    return a - b;
-}
-function multiply(a, b) {
-    return a * b;
-}
-function divide(a, b) {
-    return a / b;
-}
-function operate(operator, a, b) {
-    let result;
-    switch (operator) {
-        case "+":
-            result = add(a, b);
-            break;
-        case "-":
-            result = subtract(a, b);
-            break;
-        case "x":
-            result = multiply(a, b);
-            break;
-        default:
-            result = divide(a, b);
-    }
-    return result;
 }
 // Calculator functionality
 function appendOnDisplay(value) {
@@ -87,7 +57,7 @@ function appendOnDisplay(value) {
     needReset = false;
 }
 function setOperation(operation) {
-    if (firstOperand) {
+    if (firstOperand && currentOperation) {
         firstOperand = operate(currentOperation, firstOperand, Number(currentOnDisplay));
     }
     else {
@@ -114,15 +84,17 @@ function handleallClear() {
     resetMainScreen();
     topScreen.textContent = "";
     firstOperand = null;
-    currentOperation = "";
+    currentOperation = null;
 }
 function handleEquals() {
     if (!firstOperand)
         return;
-    const result = operate(currentOperation, firstOperand, Number(currentOnDisplay));
-    handleallClear();
-    appendOnDisplay(String(result));
-    needReset = true;
+    if (currentOperation) {
+        const result = operate(currentOperation, firstOperand, Number(currentOnDisplay));
+        handleallClear();
+        appendOnDisplay(String(result));
+        needReset = true;
+    }
 }
 function handlePlusEquals() {
     needReset = true;
