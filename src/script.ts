@@ -41,6 +41,8 @@ if (mainScreen) {
 }
 
 // Math operations
+type Operator = "+" | "-" | "x" | "/";
+
 function add(a: number, b: number): number {
   return a + b;
 }
@@ -57,7 +59,7 @@ function divide(a: number, b: number): number {
   return a / b;
 }
 
-function operate(operator: string, a: number, b: number): number {
+function operate(operator: Operator, a: number, b: number): number {
   let result: number;
 
   switch (operator) {
@@ -70,8 +72,12 @@ function operate(operator: string, a: number, b: number): number {
     case "x":
       result = multiply(a, b);
       break;
-    default:
+    case "/":
       result = divide(a, b);
+      break;
+    default:
+      const _exhaustiveCheck: never = operator;
+      result = _exhaustiveCheck;
   }
   return result;
 }
